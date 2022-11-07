@@ -1,50 +1,52 @@
 import { ThemeConsumer } from '@rneui/themed';
-import { Text,SafeAreaView } from 'react-native';
+import { Text,SafeAreaView, View } from 'react-native';
 import AnimatedLoader from 'react-native-animated-loader';
 import Styles from './LoadingStyleSheet'
-import {useState} from 'react' ;
-
+import {useState ,useEffect} from 'react' ;
+import Lottie from 'lottie-react-native';
 
 const Loading = ({navigation}) => {
 
-   const [ isLoad , setIsLoad ] = useState(true);
+   const [ isLoad , setIsLoad ] = useState(false);
 
-   function wait(delay) {
-    return new Promise(resolve => {
-      setTimeout(resolve,delay)
-    });
-   };
+   useEffect(() => {
+    setTimeout(() => {
+      setIsLoad(true);
+    }, 3000);
+  }, []);
 
-   const successLoad = () => {
+  useEffect(() => {
+    if (isLoad) {
+      navigation.replace('CareBox');
+    }
+  }, [isLoad, navigation]);
           
-          navigation.replace("CareBox");
+  
           
           
-   }
+  
    
 
-   async function WaitAnim(){
-     await wait(3000).then(successLoad);
-     //after 3 sec to do
-     
-     
-   }
-   WaitAnim();
+  
+  
     return(   
       
       <SafeAreaView style ={Styles.background}>
-      <AnimatedLoader
-     visible={true}
-     overlayColor="rgba(255,255,255,0)"
-     source={require('../../assets/anim/CareApp_Loading.json')}
-     animationStyle={Styles.lottie}
-     speed={1}
-     autoplay
-     loop={false}
-     >
-   </AnimatedLoader>
-  
-     <Text style = {Styles.text} > powered by Apple.Inc</Text>
+        <View style={{justifyContent:'center',alignItems:'center',marginTop: 150 ,flex:2}}>
+          <Lottie source={require('../../assets/anim/CareApp_Loading.json')} 
+                  autoPlay 
+                  style={Styles.lottie}
+                  loop={false}/>
+        </View>
+        
+        <View style={{
+              flex:1,
+              alignContent:'center',
+              justifyContent:'center',
+        }}>
+          <Text style = {Styles.text} > powered by Apple.Inc</Text>
+        </View>
+     
    </SafeAreaView>);
   }
   export default Loading;
