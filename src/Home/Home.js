@@ -10,6 +10,9 @@ import Styles from './HomeStyle.js'
 import { fonts } from '@rneui/base';
 import { setStatusBarBackgroundColor } from 'expo-status-bar';
 
+
+
+
 const Home = ({navigation}) => {
 
   const [connection ,setConnection] = useState('success');
@@ -19,7 +22,7 @@ const Home = ({navigation}) => {
   */
   
     return (
-      <ScrollView >
+      <SafeAreaView style={{flex: 1}}>
       <View style ={Styles.container}>
 
         <Card title="Local Modules" borderRadius={20}>
@@ -59,11 +62,34 @@ const Home = ({navigation}) => {
                         }}/>
         </View>
 
-        
+        <ScrollView>
+
+        <Card title="Local Modules" borderRadius={20}>
+            <View style ={Styles.Detail}>
+              <Image     
+                style = {Styles.clockImage}
+                source ={require('../../assets/clock.png')}
+              />
+              <Text style={Styles.TimeText}>Time</Text>
+              <Text style={Styles.TimeNum}>23:59</Text>
+                            
+              <View style={{paddingLeft:70}}>
+                <Button buttonStyle ={Styles.Button}>
+                  <Image 
+                    style = {Styles.closeImage}
+                    source ={require('../../assets/close.png')}/>
+                 </Button>
+              </View>
+            </View>
+        </Card>
+
+
+
+        </ScrollView>
 
         
       </View>
-    </ScrollView>
+    </SafeAreaView>
     );
   };
 

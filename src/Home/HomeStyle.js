@@ -47,8 +47,46 @@ const Styles = StyleSheet.create({
     },
     Detail: {
         flexDirection:"row",
+        
+    },
+    closeImage: {
+        
+        width: 26, 
+        height: 26,
+        alignItems:'center',
+        justifyContent:'center',
+        
+    },
+    clockImage: {
+        marginTop: 6,
+        marginLeft: 5,
+        width: 25, 
+        height: 25,
+        
+    },
+    TimeText:{
+        color: 'aaaaaa',
+        fontSize: 32,
+        fontWeight: 'lighter',
+        marginTop: 0,
+        paddingLeft: 20,
+    },
+    TimeNum:{
+        color: 'gray',
+        fontSize: 32,
+        fontWeight: 'lighter',
+        marginTop: 0,
+        paddingLeft: 20,
+    },
+    Button:{
+        borderRadius:10,
+        paddingLeft:8,
+        width: 40, 
+        height: 40,
+        flex:1,
+        backgroundColor:"fffff",
+        
     }
-   
 
 })
 

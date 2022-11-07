@@ -26,7 +26,11 @@ const mqttPort = 8083 ;
 /*########################################################
  #                   Function Here                       #
 ##########################################################*/
-
+const forFade = ({ current }) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+});
 
 
 /*########################################################
@@ -42,13 +46,16 @@ export default function App() {
         <Stack.Screen 
         name="CareBox" 
         component={Home} 
+        options={{animationEnabled: true,
+                  cardStyleInterpolator: forFade
+          }}
         
         />
 
         <Stack.Screen 
         name="Loading"  
         component={Loading} 
-        options={{headerShown : false}}
+        options={{animationEnabled: false,headerShown : false}}
         />
 
       </Stack.Navigator>
