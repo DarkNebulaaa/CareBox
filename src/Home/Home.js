@@ -7,8 +7,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { Card } from 'react-native-elements';
 import Styles from './HomeStyle.js'
-import { fonts } from '@rneui/base';
-import { setStatusBarBackgroundColor } from 'expo-status-bar';
+import AnimatedCard from '../components/AnimatedCard';
+
 
 
 
@@ -38,7 +38,7 @@ const Home = ({navigation}) => {
                                    paddingTop: 0,
                                    fontSize: 18,
                                    fontWeight: 'lighter',
-                                }}> Status :  </Text>
+                                }}> Connection :  </Text>
                 <View style={{paddingTop: 2}}>
                   <Badge value =  {connection}  status= {connection} badgeStyle ={{ fontSize:12 }}/>
                 </View>
@@ -64,24 +64,7 @@ const Home = ({navigation}) => {
 
         <ScrollView>
 
-        <Card title="Local Modules" borderRadius={20}>
-            <View style ={Styles.Detail}>
-              <Image     
-                style = {Styles.clockImage}
-                source ={require('../../assets/clock.png')}
-              />
-              <Text style={Styles.TimeText}>Time</Text>
-              <Text style={Styles.TimeNum}>23:59</Text>
-                            
-              <View style={{paddingLeft:70}}>
-                <Button buttonStyle ={Styles.Button}>
-                  <Image 
-                    style = {Styles.closeImage}
-                    source ={require('../../assets/close.png')}/>
-                 </Button>
-              </View>
-            </View>
-        </Card>
+        <AnimatedCard/>
 
 
 
