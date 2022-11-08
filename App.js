@@ -40,14 +40,19 @@ export default function App() {
   
 
   return (
+    
     <NavigationContainer>
+      <StatusBar barStyle    = "dark-content"/>
       <Stack.Navigator initialRouteName="Loading">
         
         <Stack.Screen 
         name="CareBox" 
         component={Home} 
         options={{animationEnabled: true,
-                  cardStyleInterpolator: forFade
+                  cardStyleInterpolator: forFade,
+                  headerTintColor: '#111',
+                  color:'black',
+                  
           }}
         
         />

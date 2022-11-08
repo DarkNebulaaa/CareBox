@@ -1,13 +1,14 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import { Text, View, Image  ,TouchableOpacity, SafeAreaView  ,Platform, ScrollView} from 'react-native';
+import { Text, View, Image  ,TouchableOpacity, SafeAreaView  , ScrollView} from 'react-native';
 import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
 import { Button } from '@rneui/themed';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { Card } from 'react-native-elements';
 import Styles from './HomeStyle.js'
 import AnimatedCard from '../components/AnimatedCard';
+import TimeCard from '../components/TimeCard.js';
+
 
 
 
@@ -25,7 +26,7 @@ const Home = ({navigation}) => {
       <SafeAreaView style={{flex: 1}}>
       <View style ={Styles.container}>
 
-        <Card title="Local Modules" borderRadius={20}>
+      <Card title="Local Modules" borderRadius={20}>
             <View style ={Styles.Detail}>
               <Image     
               style = {Styles.Image}
@@ -53,24 +54,8 @@ const Home = ({navigation}) => {
             </View>
         </Card>
 
-        <View style ={{marginTop: 20 ,marginLeft:10,marginRight:10 }}>
-                    <Button  
-                        title='Add Time' 
-                        buttonStyle ={{
-                          borderRadius: 20,
-                          backgroundColor: 'rgba(111,206,182,1)' 
-                        }}/>
-        </View>
+        <TimeCard></TimeCard>
 
-        <ScrollView>
-
-        <AnimatedCard/>
-
-
-
-        </ScrollView>
-
-        
       </View>
     </SafeAreaView>
     );
