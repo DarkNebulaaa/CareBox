@@ -1,11 +1,11 @@
-import React, {useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import {Animated, View, StyleSheet, TouchableOpacity, Text ,Image} from 'react-native';
 import { Button } from '@rneui/themed';
 import { Card } from 'react-native-elements';
-const AnimatedCard = props => {
+const AnimatedCard = (props) => {
   const leftValue = useRef(new Animated.Value(0)).current;
   const rightValue = useRef(new Animated.Value(-500)).current;
-
+  
   const AddCard = () => {
     Animated.timing(rightValue, {
       toValue: 0,
@@ -20,6 +20,7 @@ const AnimatedCard = props => {
       useNativeDriver: true,
     }).start();
   };
+  
 
   return (
     <View>
@@ -35,7 +36,7 @@ const AnimatedCard = props => {
                             source ={require('../../assets/clock.png')}
                         />
                         <Text style={styles.TimeText}>Time</Text>
-                        <Text style={styles.TimeNum}>23:59</Text>
+                        <Text style={styles.TimeNum}>{props.Hour}:{props.Min}</Text>
                             
                     <View style={{paddingLeft:65}}>
                         <Button buttonStyle ={styles.Button} onPress ={(DeleteCard)}>

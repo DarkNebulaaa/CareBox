@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "carebox",
+    "slug": "carebox",
+    "version": "1.0.0",
+    "sdkVersion": "46.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "android": {
+      "package": "com.masonhon.carebox"
+    },
+    "ios": {
+      "bundleIdentifier": "com.masonhon.carebox"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "368c4ff9-7bdc-48bd-9253-a3828abf0a6b"
+      }
+    }
+  }
+}

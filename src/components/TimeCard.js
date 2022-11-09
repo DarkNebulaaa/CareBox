@@ -1,18 +1,30 @@
 import React, {useRef ,useState} from 'react';
-import {Animated, View, StyleSheet, Text ,Image ,DatePickerIOS ,ScrollView} from 'react-native';
+import {Animated, View, StyleSheet, Text ,StatusBar ,DatePickerIOS ,ScrollView } from 'react-native';
 import { Button } from '@rneui/themed';
 import { Card } from 'react-native-elements';
 import AnimatedCard from '../components/AnimatedCard';
+import { renderNode } from '@rneui/base';
 
 
 const TimeCard = props => {
   const [chosenDate, setChosenDate] = useState(new Date());
-
+  const [timeItem ,setTimeItem] = useState([]);
   const Value = useRef(new Animated.Value(-500)).current;
   
   const ButtonValue = useRef(new Animated.Value(-310)).current;
 
+  const AddTime = () => {
+    //const time = chosenDate.substring(10 ,14)
+    console.log(chosenDate);
+    setTimeItem([...timeItem , chosenDate]);
+    DeleteCard();
+  };
 
+  const DeleteTime = (index) => {
+    let TimeCopy = [...timeItem];
+    TimeCopy.splice(index , 1);
+    setTimeItem(TimeCopy);
+  };
   
   
   const AddCard =() =>{
@@ -52,22 +64,25 @@ const TimeCard = props => {
       useNativeDriver: true,
     }).start();
   };
+
+  
   return (
     <View>
+      <StatusBar barStyle={'dark-content'}/>
       <Animated.View
         style={{
           transform: [{translateX: Value}],
           
         }}
       >
-                <Card title="Local Modules" borderRadius={20} >
+                <Card  borderRadius={20} >
                     <View >
-                      
-                      <DatePickerIOS
+                    <DatePickerIOS
                             date={chosenDate}
                             onDateChange={setChosenDate}
                             mode={'time'}
-                            accessibilityIgnoresInvertColors={true}
+                            
+                            
                       />
                     </View>
                     <View style={{flexDirection:'row' ,alignItems:'center', justifyContent:'center'}}>
@@ -81,7 +96,7 @@ const TimeCard = props => {
                       </View>
                       
                       <Button buttonStyle={{ borderRadius: 25,backgroundColor :'rgba(111,206,182,1)',borderColor:'rgba(111,206,182,1)',borderWidth:2}}
-                      onPress ={DeleteCard}>
+                      onPress ={AddTime}>
                       <Text style={{fontSize:20 ,color:'rgba(255,255,255,1)'}}>
                             Confirm
                           </Text>
@@ -110,11 +125,20 @@ const TimeCard = props => {
         </View>
 
         <ScrollView>
-
-            <AnimatedCard/>
-
-
-
+        {
+            timeItem.map((item , index) => {
+              const format = (min) => {
+                if(min <10)
+                {
+                  return('0' + min);
+                }
+                else return (min);
+              }
+              return(
+                <AnimatedCard key ={index} Hour={item.getHours()} Min = {format(item.getMinutes())}/>
+              );
+            })
+        }          
         </ScrollView>
 
       </Animated.View>                  
@@ -123,6 +147,7 @@ const TimeCard = props => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   btnText: {
