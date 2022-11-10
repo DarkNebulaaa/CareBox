@@ -16,8 +16,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "368c4ff9-7bdc-48bd-9253-a3828abf0a6b"
+        "projectId": "867e73b8-d184-4efd-aea7-7e7b84bafbbd"
       }
+    },
+    "runtimeVersion": "exposdk:46.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/867e73b8-d184-4efd-aea7-7e7b84bafbbd"
     }
   }
 }

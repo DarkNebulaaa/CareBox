@@ -8,9 +8,9 @@
     <true/>
     <key>EXUpdatesLaunchWaitMs</key>
     <integer>0</integer>
-    <key>EXUpdatesSDKVersion</key>
-    <string>46.0.0</string>
+    <key>EXUpdatesRuntimeVersion</key>
+    <string>1.0.0</string>
     <key>EXUpdatesURL</key>
-    <string>https://exp.host/@masonhon/carebox</string>
+    <string>https://u.expo.dev/867e73b8-d184-4efd-aea7-7e7b84bafbbd</string>
   </dict>
 </plist>
