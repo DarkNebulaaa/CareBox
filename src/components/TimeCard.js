@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   StatusBar,
+  Image,
   DatePickerIOS,
   ScrollView,
 } from "react-native";
@@ -26,6 +27,8 @@ const TimeCard = (props) => {
   //Animation Value
   const Value = useRef(new Animated.Value(-500)).current;
   const ButtonValue = useRef(new Animated.Value(-310)).current;
+
+ 
   //JSON Struct
 
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -38,6 +41,7 @@ const TimeCard = (props) => {
     DeleteCard();
   };
   const DeleteTime = (index) => {
+    removeData(index);
     let TimeCopy = [...timeItem];
     TimeCopy.splice(index, 1);
     setTimeItem(TimeCopy);
@@ -85,6 +89,15 @@ const TimeCard = (props) => {
       console.log("error: err to  storeData");
     }
   };
+  const removeData = async (index) => {
+    try {
+      await AsyncStorage.removeItem( "＠ＣareBox:time:" + index)
+    } catch(e) {
+      // remove error
+    }
+  
+    console.log('Done.')
+  }
   const getData = async (index) => {
     try {
       const value = await AsyncStorage.getItem("＠ＣareBox:time:" + index);
@@ -97,6 +110,7 @@ const TimeCard = (props) => {
       console.log("error: err to get!!");
     }
   };
+ 
 
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@    Return the frontend    @@@@@@@@@@@@@@@@@@
@@ -187,20 +201,28 @@ const TimeCard = (props) => {
                 return "0" + hour;
               } else return hour;
             };
-
+            
+            
             storeData(
               index,
               formatH(item.getHours()),
               formatM(item.getMinutes())
             );
             getData(index);
+            
 
             return (
+              
               <AnimatedCard
                 key={index}
                 Hour={formatH(item.getHours())}
                 Min={formatM(item.getMinutes())}
-              />
+                DeleteTime={DeleteTime}
+              >
+                
+              </AnimatedCard>
+              
+             
             );
           })}
         </ScrollView>

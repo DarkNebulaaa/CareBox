@@ -6,7 +6,7 @@ import { Button } from '@rneui/themed';
 import { useState } from 'react';
 import { Card } from 'react-native-elements';
 import Styles from './HomeStyle.js'
-import AnimatedCard from '../components/AnimatedCard';
+
 import TimeCard from '../components/TimeCard.js';
 
 
