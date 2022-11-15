@@ -16,6 +16,15 @@ import { renderNode } from "@rneui/base";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+async function  initTimeObject() {
+    for(let i = 0 ; i < 10 ; i ++)
+    {
+      if(AsyncStorage.getItem("＠ＣareBox:time:" + i ) != null)  
+        {
+          
+        }
+    }
+}
 const TimeCard = (props) => {
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@     Define Value     @@@@@@@@@@@@@@@@@@@@@
@@ -28,7 +37,7 @@ const TimeCard = (props) => {
   const Value = useRef(new Animated.Value(-500)).current;
   const ButtonValue = useRef(new Animated.Value(-310)).current;
 
- 
+ // AsyncStorage.clear();
   //JSON Struct
 
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -208,7 +217,7 @@ const TimeCard = (props) => {
               formatH(item.getHours()),
               formatM(item.getMinutes())
             );
-            getData(index);
+            
             
 
             return (
