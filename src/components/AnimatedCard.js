@@ -3,7 +3,6 @@ import {
   Animated,
   View,
   StyleSheet,
-  TouchableOpacity,
   Text,
   Image,
 } from "react-native";
@@ -33,7 +32,6 @@ const AnimatedCard = (props) => {
       duration: 500,
       useNativeDriver: true,
     }).start();
-    console.log(EndValue);
   };
   const Removing =() =>{ 
     Animated.timing(RemoveValue, {

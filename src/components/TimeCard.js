@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { Children, useRef, useState } from "react";
 import {
   Animated,
   View,
@@ -16,41 +16,55 @@ import { renderNode } from "@rneui/base";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-async function  initTimeObject() {
-    for(let i = 0 ; i < 10 ; i ++)
-    {
-      if(AsyncStorage.getItem("＠ＣareBox:time:" + i ) != null)  
-        {
-          
-        }
-    }
-}
 const TimeCard = (props) => {
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@     Define Value     @@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
+  async function initTimeObject() {
+    for (let i = 0; i > 0; i++) {
+      if ((await AsyncStorage.getItem("＠ＣareBox:time:" + i)) != null) {
+        setTimeItem([
+          ...timeItem,
+          await AsyncStorage.getItem("＠ＣareBox:time:" + i),
+        ]);
+      } else;
+    }
+  }
+  initTimeObject();
   // State Value
   const [chosenDate, setChosenDate] = useState(new Date());
-  const [timeItem, setTimeItem] = useState([]);
+  const [timeItem, setTimeItem] = useState([]); //初始化務必對他做async storage 的存取
   //Animation Value
   const Value = useRef(new Animated.Value(-500)).current;
   const ButtonValue = useRef(new Animated.Value(-310)).current;
 
- // AsyncStorage.clear();
+  // AsyncStorage.clear();
   //JSON Struct
 
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@    Function Here    @@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
   const AddTime = () => {
-    //const time = chosenDate.substring(10 ,14)
-
-    setTimeItem([...timeItem, chosenDate]);
+    //add time 會對chosendate 做format以及字串化儲存在陣列,async storage當中
+    const formatM = (min) => {
+      if (min < 10) {
+        return "0" + min;
+      } else return min;
+    };
+    const formatH = (hour) => {
+      if (hour < 10) {
+        return "0" + hour;
+      } else return hour;
+    };
+    const strHour = chosenDate.getHours();
+    const strMin = chosenDate.getMinutes();
+    const strTime = formatH(strHour) + ":" + formatM(strMin);
+    setTimeItem([...timeItem, strTime]);
+    storeData(timeItem.length, strTime);
     DeleteCard();
   };
   const DeleteTime = (index) => {
-    removeData(index);
+    storeData();
     let TimeCopy = [...timeItem];
     TimeCopy.splice(index, 1);
     setTimeItem(TimeCopy);
@@ -87,39 +101,41 @@ const TimeCard = (props) => {
       useNativeDriver: true,
     }).start();
   };
-  const storeData = async (index, hour, min) => {
+  const storeData = async () => {
     try {
-      await AsyncStorage.setItem(
-        "＠ＣareBox:time:" + index,
-        "T" + hour + ":" + min
-      );
+      await AsyncStorage.setItem("＠ＣareBox:time:", JSON.stringify(timeItem));
+      
     } catch (error) {
       // 儲存錯誤
       console.log("error: err to  storeData");
     }
+     
   };
-  const removeData = async (index) => {
+
+  /*const removeData = async (index) => {
     try {
-      await AsyncStorage.removeItem( "＠ＣareBox:time:" + index)
-    } catch(e) {
+      await AsyncStorage.removeItem("＠ＣareBox:time:" + index);
+    } catch (e) {
       // remove error
     }
-  
-    console.log('Done.')
-  }
-  const getData = async (index) => {
+
+    console.log("Done.");
+  };
+  */
+
+  const getData = async () => {
     try {
-      const value = await AsyncStorage.getItem("＠ＣareBox:time:" + index);
+      const value = await AsyncStorage.getItem("＠ＣareBox:time:");
       if (value !== null) {
         // 有值！
-        console.log(value);
+        console.log("getData :" + typeof value + " (" + value + ")");
+        
       }
     } catch (error) {
       // 取值錯誤
       console.log("error: err to get!!");
     }
   };
- 
 
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@    Return the frontend    @@@@@@@@@@@@@@@@@@
@@ -199,39 +215,13 @@ const TimeCard = (props) => {
 
         <ScrollView>
           {timeItem.map((item, index) => {
-            const formatM = (min) => {
-              if (min < 10) {
-                return "0" + min;
-              } else return min;
-            };
-
-            const formatH = (hour) => {
-              if (hour < 10) {
-                return "0" + hour;
-              } else return hour;
-            };
-            
-            
-            storeData(
-              index,
-              formatH(item.getHours()),
-              formatM(item.getMinutes())
-            );
-            
-            
-
             return (
-              
               <AnimatedCard
                 key={index}
-                Hour={formatH(item.getHours())}
-                Min={formatM(item.getMinutes())}
+                Hour={item.slice(0, 2)}
+                Min={item.slice(3, 5)}
                 DeleteTime={DeleteTime}
-              >
-                
-              </AnimatedCard>
-              
-             
+              ></AnimatedCard>
             );
           })}
         </ScrollView>

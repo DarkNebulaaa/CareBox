@@ -64,7 +64,7 @@ const Home = ({ navigation }) => {
     console.log(" onConnect ");
     setConnection("success");
     client.subscribe(subTopic);
-    client.publish(topic, 'getData(1)');
+    client.publish(topic, getData(1));
   };
 
   const onFailure = () => {
