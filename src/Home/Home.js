@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
 import { Button } from "@rneui/themed";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { Card } from "react-native-elements";
 import Styles from "./HomeStyle.js";
 import init from "react_native_mqtt";
@@ -24,7 +24,10 @@ const subTopic = mqttConfig.subTopic;
 const topic = mqttConfig.topic;
 const user = mqttConfig.user;
 const password = mqttConfig.password;
-
+let canPub = true;
+let morning =1;
+let noon =1;
+let evening =1;
 init({
   size: 10000,
   defaultExpires: 1000 * 3600 * 24,
@@ -33,20 +36,53 @@ init({
   sync: {},
 });
 
-const getData = async (index) => {
-  try {
-    const value = await AsyncStorage.getItem("＠ＣareBox:time:" + index);
-    if (value !== null) {
-      // 有值！
-      console.log(value);
-    }
-  } catch (error) {
-    // 取值錯誤
-    console.log("error: err to get!!");
-  }
-};
+
+function delay(n){
+  return new Promise(function(resolve){
+      setTimeout(resolve,n*1000);
+  });
+}
 
 const Home = ({ navigation }) => {
+  
+  const getData = async () => {
+    try {
+      
+      const value = await AsyncStorage.getItem("＠ＣareBox:time:");
+      if (value !== null) {
+        // 有值
+        //console.log(value);
+        let strValue =JSON.parse(value);
+        for(let i = 0 ;i < 4 ; i++)
+        {
+         let hour= strValue[i].slice(0, 2);
+            
+            if(hour > 0 && hour <12)
+            {
+               morning =12;
+               noon =noon;
+               evening =evening;
+            }
+            else if(hour > 12 && hour <17)
+            {
+               morning =morning;
+               noon =hour;
+               evening =evening;
+            }
+            else if(hour > 17 && hour <23)
+            {
+               morning =morning;
+               noon =noon;
+               evening =hour;
+            }
+        }
+        
+      }
+    } catch (error) {
+      // 取值錯誤
+      console.log("error: err to get!!" + error);
+    }
+  };
   /*#####################################################################
    ######################           MQTT           ######################
    #####################################################################*/
@@ -64,9 +100,23 @@ const Home = ({ navigation }) => {
     console.log(" onConnect ");
     setConnection("success");
     client.subscribe(subTopic);
-    client.publish(topic, getData(1));
+   
   };
+  async function  Pub () {
+    
+    await getData();
+    let data ={
+      "morning": morning,
+      "noon": noon,
+      "evening": evening  
+    }
+    //console.log(string);
+    client.subscribe(subTopic);
 
+        await client.publish(topic,JSON.stringify(data));
+  
+    
+  };
   const onFailure = () => {
     console.log(" failure ");
     setConnection("waring");
@@ -83,15 +133,17 @@ const Home = ({ navigation }) => {
   }
   mqttInit();
   
+  
   /*#####################################################################
  ######################           ####           ######################
  #####################################################################*/
   const [connection, setConnection] = useState("error");
+  
   /*
   var hours = new Date().getHours(); //To get the Current Hours
   var min = new Date().getMinutes(); //To get the Current Minutes
   */
-
+ 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={Styles.container}>
@@ -124,6 +176,14 @@ const Home = ({ navigation }) => {
               </View>
 
               <Text style={Styles.text}> Let's care about your health !!</Text>
+              <Button buttonStyle={{
+                borderRadius: 25,
+                backgroundColor: "rgba(111,206,182,1)",
+                borderColor: "rgba(111,206,182,1)",
+                borderWidth: 2,
+              }}
+              style ={{paddingTop :40,paddingLeft:20}}
+              onPress= {Pub}> Refresh </Button>
             </View>
           </View>
         </Card>

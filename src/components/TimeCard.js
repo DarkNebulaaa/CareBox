@@ -1,4 +1,4 @@
-import React, { Children, useRef, useState } from "react";
+import React, { Children, useRef, useState, useEffect } from "react";
 import {
   Animated,
   View,
@@ -12,39 +12,43 @@ import {
 import { Button } from "@rneui/themed";
 import { Card } from "react-native-elements";
 import AnimatedCard from "../components/AnimatedCard";
-import { renderNode } from "@rneui/base";
+
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+AsyncStorage.clear();
 const TimeCard = (props) => {
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@     Define Value     @@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-  async function initTimeObject() {
-    for (let i = 0; i > 0; i++) {
-      if ((await AsyncStorage.getItem("＠ＣareBox:time:" + i)) != null) {
-        setTimeItem([
-          ...timeItem,
-          await AsyncStorage.getItem("＠ＣareBox:time:" + i),
-        ]);
-      } else;
-    }
-  }
-  initTimeObject();
+ 
+  
+  //initTimeObject();
   // State Value
   const [chosenDate, setChosenDate] = useState(new Date());
   const [timeItem, setTimeItem] = useState([]); //初始化務必對他做async storage 的存取
+
   //Animation Value
+  const [canAddTime, setCanAddTime] = useState(false);
   const Value = useRef(new Animated.Value(-500)).current;
   const ButtonValue = useRef(new Animated.Value(-310)).current;
 
-  // AsyncStorage.clear();
+  
   //JSON Struct
+
 
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@    Function Here    @@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-  const AddTime = () => {
+  async function CheckCanAddTime() {
+    console.log(timeItem.length);
+    if ((await timeItem.length) < 4) {
+      setCanAddTime(false);
+    } else {
+      setCanAddTime(true);
+    }
+  }
+  async function AddTime() {
+    
     //add time 會對chosendate 做format以及字串化儲存在陣列,async storage當中
     const formatM = (min) => {
       if (min < 10) {
@@ -59,15 +63,19 @@ const TimeCard = (props) => {
     const strHour = chosenDate.getHours();
     const strMin = chosenDate.getMinutes();
     const strTime = formatH(strHour) + ":" + formatM(strMin);
-    setTimeItem([...timeItem, strTime]);
-    storeData(timeItem.length, strTime);
+    await setTimeItem([...timeItem, strTime]);
+    await storeData().then(()=> {console.log(timeItem)});
     DeleteCard();
-  };
-  const DeleteTime = (index) => {
-    storeData();
+  }
+  async function DeleteTime  (index) {
+    CheckCanAddTime();
+    
     let TimeCopy = [...timeItem];
     TimeCopy.splice(index, 1);
-    setTimeItem(TimeCopy);
+     await setTimeItem(TimeCopy);
+     console.log(timeItem);
+     await storeData().then(()=> {console.log(timeItem)});
+    
   };
   const AddCard = () => {
     AddButton();
@@ -104,32 +112,20 @@ const TimeCard = (props) => {
   const storeData = async () => {
     try {
       await AsyncStorage.setItem("＠ＣareBox:time:", JSON.stringify(timeItem));
-      
     } catch (error) {
       // 儲存錯誤
       console.log("error: err to  storeData");
+      
     }
-     
   };
 
-  /*const removeData = async (index) => {
-    try {
-      await AsyncStorage.removeItem("＠ＣareBox:time:" + index);
-    } catch (e) {
-      // remove error
-    }
-
-    console.log("Done.");
-  };
-  */
-
+  
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("＠ＣareBox:time:");
       if (value !== null) {
         // 有值！
         console.log("getData :" + typeof value + " (" + value + ")");
-        
       }
     } catch (error) {
       // 取值錯誤
@@ -140,7 +136,9 @@ const TimeCard = (props) => {
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@    Return the frontend    @@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
+useEffect(() => {
+  CheckCanAddTime();
+}, [timeItem]);
   return (
     <View>
       <StatusBar barStyle={"dark-content"} />
@@ -188,6 +186,7 @@ const TimeCard = (props) => {
                 borderWidth: 2,
               }}
               onPress={AddTime}
+              
             >
               <Text style={{ fontSize: 20, color: "rgba(255,255,255,1)" }}>
                 Confirm
@@ -209,6 +208,7 @@ const TimeCard = (props) => {
               borderRadius: 20,
               backgroundColor: "rgba(111,206,182,1)",
             }}
+            disabled={canAddTime}
             onPress={AddCard}
           />
         </View>
