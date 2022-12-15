@@ -64,7 +64,7 @@ const TimeCard = (props) => {
     const strMin = chosenDate.getMinutes();
     const strTime = formatH(strHour) + ":" + formatM(strMin);
     await setTimeItem([...timeItem, strTime]);
-    await storeData().then(()=> {console.log(timeItem)});
+   // await storeData().then(()=> {console.log(timeItem)});
     DeleteCard();
   }
   async function DeleteTime  (index) {
@@ -74,7 +74,8 @@ const TimeCard = (props) => {
     TimeCopy.splice(index, 1);
      await setTimeItem(TimeCopy);
      console.log(timeItem);
-     await storeData().then(()=> {console.log(timeItem)});
+     
+    // await storeData().then(()=> {console.log(timeItem)});
     
   };
   const AddCard = () => {
@@ -111,7 +112,7 @@ const TimeCard = (props) => {
   };
   const storeData = async () => {
     try {
-      await AsyncStorage.setItem("＠ＣareBox:time:", JSON.stringify(timeItem));
+      await AsyncStorage.setItem("＠ＣareBox:time:", JSON.stringify(timeItem)).then(props.mqtt());
     } catch (error) {
       // 儲存錯誤
       console.log("error: err to  storeData");
@@ -139,6 +140,10 @@ const TimeCard = (props) => {
 useEffect(() => {
   CheckCanAddTime();
 }, [timeItem]);
+
+  useEffect(() => {
+    storeData();
+  }, [timeItem]);
   return (
     <View>
       <StatusBar barStyle={"dark-content"} />

@@ -52,31 +52,7 @@ const Home = ({ navigation }) => {
       if (value !== null) {
         // 有值
         //console.log(value);
-        let strValue =JSON.parse(value);
-        for(let i = 0 ;i < 4 ; i++)
-        {
-         let hour= strValue[i].slice(0, 2);
-            
-            if(hour > 0 && hour <12)
-            {
-               morning =12;
-               noon =noon;
-               evening =evening;
-            }
-            else if(hour > 12 && hour <17)
-            {
-               morning =morning;
-               noon =hour;
-               evening =evening;
-            }
-            else if(hour > 17 && hour <23)
-            {
-               morning =morning;
-               noon =noon;
-               evening =hour;
-            }
-        }
-        
+        return value;
       }
     } catch (error) {
       // 取值錯誤
@@ -113,7 +89,7 @@ const Home = ({ navigation }) => {
     //console.log(string);
     client.subscribe(subTopic);
 
-        await client.publish(topic,JSON.stringify(data));
+        await client.publish(topic,await getData());
   
     
   };
@@ -176,19 +152,12 @@ const Home = ({ navigation }) => {
               </View>
 
               <Text style={Styles.text}> Let's care about your health !!</Text>
-              <Button buttonStyle={{
-                borderRadius: 25,
-                backgroundColor: "rgba(111,206,182,1)",
-                borderColor: "rgba(111,206,182,1)",
-                borderWidth: 2,
-              }}
-              style ={{paddingTop :40,paddingLeft:20}}
-              onPress= {Pub}> Refresh </Button>
+              
             </View>
           </View>
         </Card>
 
-        <TimeCard></TimeCard>
+        <TimeCard mqtt = {Pub}></TimeCard>
       </View>
     </SafeAreaView>
   );
