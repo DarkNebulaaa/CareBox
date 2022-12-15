@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "carebox",
+    "slug": "carebox",
+    "version": "1.0.0",
+    "sdkVersion": "46.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "android": {
+      "package": "com.masonhon.carebox"
+    },
+    "ios": {
+      "bundleIdentifier": "com.masonhon.carebox"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "867e73b8-d184-4efd-aea7-7e7b84bafbbd"
+      }
+    },
+    "runtimeVersion": "exposdk:46.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/867e73b8-d184-4efd-aea7-7e7b84bafbbd"
+    }
+  }
+}

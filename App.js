@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { Text, View, Image  ,TouchableOpacity,SafeAreaView} from 'react-native';
-import AnimatedLoader from 'react-native-animated-loader';
+
 
 
 
@@ -40,14 +40,19 @@ export default function App() {
   
 
   return (
-    <NavigationContainer>
+    
+    <NavigationContainer >
+      <StatusBar barStyle    = "dark-content"/>
       <Stack.Navigator initialRouteName="Loading">
         
         <Stack.Screen 
         name="CareBox" 
         component={Home} 
         options={{animationEnabled: true,
-                  cardStyleInterpolator: forFade
+                  cardStyleInterpolator: forFade,
+                  headerTintColor: '#111',
+                  color:'black',
+                  
           }}
         
         />
